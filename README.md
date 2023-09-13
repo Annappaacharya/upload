@@ -80,7 +80,7 @@ Request Details :
 
 |Json Fields|Possible value|Description|
 | --- | --- | ---|
-|apkversion*||Application present version.|
+|apkversion*||Application present version.
 |uid*||User Id of the login user|
 |pwd*||Sha256 of the user entered password.|
 |factor2*||OTP or TOTP|

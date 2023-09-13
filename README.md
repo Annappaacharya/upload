@@ -79,7 +79,7 @@ ret = api.login(userid=uid, password=pwd, twoFA=factor2, vendor_code=vc, api_sec
 Request Details :
 
 |Json Fields|Possible value|Description|
-| --- | --- | ---|
+| --- | --- | ---
 |apkversion*||Application present version.|
 |uid*||User Id of the login user|
 |pwd*||Sha256 of the user entered password.|

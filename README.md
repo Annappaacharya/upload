@@ -96,6 +96,7 @@ Response Details :
 
 
 |Json Fields|Possible value|Description|
+| --- | --- | ---|
 |stat|Ok or Not_Ok|Login Success Or failure status|
 |susertoken||It will be present only on login success. This data to be sent in subsequent requests in jKey field and web socket connection while connecting. |
 |lastaccesstime||It will be present only on login success.|

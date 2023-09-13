@@ -79,7 +79,7 @@ ret = api.login(userid=uid, password=pwd, twoFA=factor2, vendor_code=vc, api_sec
 Request Details :
 
 |Json Fields|Possible value|Description|
-| --- | --- | ---
+| --- | --- | ---|
 |apkversion*||Application present version.|
 |uid*||User Id of the login user|
 |pwd*||Sha256 of the user entered password.|
@@ -96,7 +96,6 @@ Response Details :
 
 
 |Json Fields|Possible value|Description|
-| --- | --- | ---|
 |stat|Ok or Not_Ok|Login Success Or failure status|
 |susertoken||It will be present only on login success. This data to be sent in subsequent requests in jKey field and web socket connection while connecting. |
 |lastaccesstime||It will be present only on login success.|

@@ -7,7 +7,7 @@ Api used to connect to NorenOMS
 
 to build this package and install it on your server please use 
 
-``` pip install NorenRestApi ```
+``` pip install -r requirements.txt ```
 
 
 ****
@@ -40,22 +40,10 @@ Holdings and Limits
 - [get_positions](#md-get_positions)
 - [get_limits](#md-get_limits)
 
-Calculators
-- [span_calculator](#md-span_calculator)
-- [get_option_greek](#md-get_option_greek)
-
 Websocket API
 - [start_websocket](#md-start_websocket)
 - [subscribe](#md-subscribe)
 - [unsubscribe](#md-unsubscribe)
-
-Annexure
-- [Alert Type](#md-alert_type)
-- [Report Type](#md-report_type)
-- [Status Type](#md-status_type)
-- [Internal Status Type](#md-internal_status_type)
-- [Order Type](#md-order_type)
-- [Product Type](#md-product_type)
 
 Example
 - [getting started](#md-example-basic)
@@ -1180,124 +1168,6 @@ Sample Failure Response :
 Market Info
 
 
-#### <a name="md-span_calculator"></a> span_calculator(actid,positionlist)
-This calculates the margin requirement for a list of input positions.
-
-Example: 
-
-```
-ret = api.span_calculator(actid,positionlist)
-```
-Request Details :
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-|actid*||Any Account id, preferably actual account id if sending from post login screen.|
-|pos*||Array of json objects. (object fields given in below table)|
-
-Position structure as follows:
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-| prd | C / M / H  | Product | 
-|exch|NFO, CDS, MCX ...|Exchange|
-|instname|FUTSTK, FUTIDX, OPTSTK, FUTCUR...|Instrument name|
-|symname|USDINR, ACC, ABB,NIFTY.. |Symbol name|
-|exd|29-DEC-2022|DD-MMM-YYYY format|
-|optt|CE, PE|Option Type|
-|strprc|11900.00, 71.0025|Strike price|
-|buyqty||Buy Open Quantity|
-|sellqty||Sell Open Quantity|
-|netqty||Net traded quantity|
-
-
-Response Details :
-
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-|stat|Ok or Not_Ok|Market watch success or failure indication.|
-|span||Span value |
-|expo||IExposure margin|
-|span_trade||Span value ignoring input fields buyqty, sellqty|
-|expo_trade||Exposure margin ignoring input fields buyqty, sellqty|
-
-Sample Success Response :
-{
-    "request_time": "11:01:59 25-11-2022",
-    "stat": "Ok",
-    "span": "19416.00",
-    "expo": "4338.34",
-    "span_trade": "19416.00",
-    "expo_trade": "4338.34"
-}
-
-
-#### <a name="md-get_option_greek"></a>get_option_greek(expiredate,StrikePrice,SpotPrice,InitRate,Volatility,OptionType)
-Options greeeks computed the delta, thetha, vega , rho values.
-
-Example: 
-
-```
-ret = api.option_greek(expiredate ='24-NOV-2022',StrikePrice='150',SpotPrice  = '200',InitRate  = '100',Volatility = '10',OptionType='CE')
-```
-Request Details :
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-|exd*||Expiry Date|
-|strprc*||Strike Price |
-|sptprc*||Spot Price|
-|int_rate*||Init Rate|
-|volatility*||Volatility|
-|optt|CE or PE|Option Type|
-
-Response Details :
-
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-|stat|Ok or Not_Ok|success or failure indication.|
-|request_time||This will be present only in a successful response.|
-|cal_price||Cal Price|
-|put_price||Put Price|
-|cal_delta||Cal Delta|
-|put_delta||Put Delta|
-|cal_gamma||Cal Gamma|
-|put_gamma||Put Gamma|
-|cal_theta||Cal Theta|
-|put_theta||Put Theta|
-|cal_delta||Cal Delta|
-|cal_rho||Cal Rho|
-|put_rho||Put Rho|
-|cal_vego||Cal Vego|
-|put_vego||Put Vego|
-
-Sample Success Response :
- {
-"request_time":"17:22:58 28-07-2021",
-"stat":"OK",
-"cal_price":"1441",
-"put_price":"0.417071",
-"cal_delta":"0.997304",
-"put_delta":"-0.002696",
-"cal_gamma":"0.000001",
-"put_gamma":"0.000001",
-"cal_theta":"-31.535015",
-"put_theta":"-31.401346",
-"cal_rho":"0.000119",
-"put_rho":"-0.016590",
-"cal_vego":"0.006307",
-put_vego":"0.006307"
-  }
-
-Sample Failure Response :
-{
- "stat":"Not_Ok",
- "emsg":"Invalid Input :  jData is Missing."
-}
-
-
 #### <a name="md-searchscrip"></a> searchscrip(exchange, searchtext):
 Search for scrip or contract and its properties  
 
@@ -1855,64 +1725,6 @@ Sample Failure Response :
      "emsg":"Session Expired : Invalid Session Key"
 }
 
-#### <a name="md-get_daily_price_series"></a>get_daily_price_series(Symbol name, From date, To date):
-gets the chart date for the symbol
-
-Example:
-```
-ret =api.get_daily_price_series(exchange="NSE",tradingsymbol="PAYTM-EQ",startdate="457401600",enddate="480556800")
-```
-Request Details :
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-|sym*||Symbol name|
-|from*||From date|
-|to*||To date |
-
-Response Details :
-
-|Json Fields|Possible value|Description|
-| --- | --- | ---|
-|stat|Ok|TPData success indication.|
-|time||DD/MM/CCYY hh:mm:ss|
-|into||Interval open|
-|inth||Interval high|
-|intl||Interval low|
-|intc||Interval close|
-|ssboe||Date,Seconds in 1970 format|
-|intv||Interval volume|
-
-Sample Success Response :
-[
-  "{
-       \"time\":\"21-SEP-2022\",
-       \"into\":\"2496.75\",
-       \"inth\":\"2533.00\",
-       \"intl\":\"2495.00\", 
-       \"intc\":\"2509.75\",
-       \"ssboe\":\"1663718400\",
-       \"intv\":\"4249172.00\"
-   }",
- "{
-       \"time\":\"15-SEP-2022\",
-       \"into\":\"2583.00\",
-       \"inth\":\"2603.55\",
-       \"intl\":\"2556.75\",
-       \"intc\":\"2562.70\", 
-       \"ssboe\":\"1663200000\",
-       \"intv\":\"4783723.00\"
-  }",
- "{ 	
-       \"time\":\"28-JUN-2021\",
-       \"into\":\"2122.00\",
-       \"inth\":\"2126.50\", 
-       \"intl\":\"2081.00\", 
-       \"intc\":\"2086.00\", 
-       \"ssboe\":\"1624838400\",
-        \"intv\":\"9357852.00\"
-  }"
-]
 
 #### <a name="md-get_optionchain"></a> get_option_chain(exchange, tradingsymbol, strikeprice, count):
 
@@ -2076,98 +1888,6 @@ Accept for t, e, and tk other fields may / may not be present.
 
 #### <a name="md-unsubscribe"></a> unsubscribe()
 send a list of instruments to stop watch
-
-#### <a name="md-alert_type"></a>Alert Type:
-
-| Alert Criteria |  Condition| Alert type|Transformation and data validations|
-| --- | --- | --- | ---|
-| LTP | > |LTP_A| depending on scrip 'pp' from search results allow 2/4 precision|
-| LTP  |<|LTP_B | depending on scrip 'pp' from search results allow 2/4 precision|
-| Change %  |> |CH_PER_A | Upto 2 decimals allowed|
-| Change %  |< |CH_PER_B| Upto 2 decimals allowed|
-| Average Trade price of day  |>|ATP_A |depending on scrip 'pp' from search results allow 2/4 precision|
-| Average Trade price of day  |<|ATP_B | depending on scrip 'pp' from search results allow 2/4 precision|
-| LTP vs 52week high  |>|LTP_A_52HIGH | No input data|
-| LTP vs 52week high  |<|LTP_B_52LOW  | No input data|
-| Volume  |>|VOLUME_A | Non decimal number|
-| Open Interest  |>|OI_A | Non decimal number, allow only for derivative contracts|
-| Open Interest  |<|OI_B | Non decimal number, allow only for derivative contracts|
-| Total Open Interest  |>|TOI_A | Non decimal number, this will work only for NSE symbols which are FO listed.|
-| Total Open Interest  |<|TOI_B | Non decimal number, this will work only for NSE symbols which are FO listed.|
-| LTP  |Both > and < |LMT_BOS_O | depending on scrip 'pp' from search results allow 2/4 precision|
-
-Note: All alert types with _O appended will work for GTT order types. Example: to set GTT order when LTP goes above 1,000, set alert type as LTP_A_O
-
-
-#### <a name="md-report_type"></a>Report Type:
-
-| Possible Values | 
-| --- | 
-|NewAck| 
-|ModAck| 
-|CanAck| 
-|PendingNew| 
-|PendingReplace| 
-|PendingCancel|     
-|New| 
-|Replaced| 
-|Canceled| 
-|Fill| 
-|Rejected| 
-|ReplaceRejected| 
-|CancelRejected| 
-|INVALID_REPORT_TYPE| 
-
-#### <a name="md-status_type"></a>Status Type:
-
-| Possible Values | 
-| --- | 
-|PENDING| 
-|CANCELED| 
-|OPEN| 
-|REJECTED| 
-|COMPLETE| 
-|TRIGGER_PENDING| 
-|INVALID_STATUS_TYPE| 
-
-#### <a name="md-internal_status_type"></a>Internal Status Type:
-
-| Possible Values | 
-| --- | 
-|COMPLETE| 
-|PARTIAL FILL| 
-|REJECTED| 
-|CANCELED| 
-|MODIFY PENDING| 
-|CANCEL PENDING| 
-|ORDER PENDING| 
-|OPEN| 
-|ORDER ACK| 
-|MODIFY ACK| 
-|CANCEL ACK| 
-|TRIGGER_PENDING| 
-|AMO OPEN| 
-|AMO MODIFIED| 
-|AMO CANCELED| 
-
-#### <a name="md-order_type"></a>Order Type:
-
-| Possible Values | Description|
-| --- | ---|
-|LMT| Limit order|
-|MKT| Market order|
-|SL-LMT| Stop-Limit Order|
-|SL-MKT| Stop-Limit  Market order|
-
-#### <a name="md-product_type"></a>Product Type:
-
-| Possible Values | Description|
-| --- | ---|
-|C|CNC / Delivery|
-|M|CF/ Carry Forward |
-|I|	IntraDay / MIS|
-|H|	CO / Cover Order|
-|B|	BO / Bracket Order|
 
 ****
 ## <a name="md-example-basic"></a> Example - Getting Started
